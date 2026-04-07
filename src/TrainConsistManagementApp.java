@@ -3,7 +3,7 @@ import java.util.stream.Collectors;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-// Bogie class (same file, not public)
+// Passenger Bogie
 class Bogie {
     String name;
     int capacity;
@@ -16,6 +16,22 @@ class Bogie {
     @Override
     public String toString() {
         return name + " (Capacity: " + capacity + ")";
+    }
+}
+
+// Goods Bogie (UC12)
+class GoodsBogie {
+    String type;
+    String cargo;
+
+    public GoodsBogie(String type, String cargo) {
+        this.type = type;
+        this.cargo = cargo;
+    }
+
+    @Override
+    public String toString() {
+        return type + " carrying " + cargo;
     }
 }
 
@@ -45,7 +61,7 @@ public class TrainConsistManagementApp {
         Set<String> bogieIds = new HashSet<>();
         bogieIds.add("BG101");
         bogieIds.add("BG102");
-        bogieIds.add("BG101"); // duplicate
+        bogieIds.add("BG101");
         System.out.println("Unique Bogie IDs: " + bogieIds);
 
         // UC4
@@ -70,7 +86,7 @@ public class TrainConsistManagementApp {
         formation.add("Sleeper");
         formation.add("Cargo");
         formation.add("Guard");
-        formation.add("Sleeper"); // duplicate ignored
+        formation.add("Sleeper");
 
         System.out.println("Formation: " + formation);
 
@@ -91,7 +107,7 @@ public class TrainConsistManagementApp {
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 56));
         bogieList.add(new Bogie("First Class", 24));
-        bogieList.add(new Bogie("Sleeper", 72)); // duplicate for grouping
+        bogieList.add(new Bogie("Sleeper", 72));
 
         bogieList.sort(Comparator.comparingInt(b -> b.capacity));
 
@@ -128,7 +144,7 @@ public class TrainConsistManagementApp {
 
         System.out.println("Total seating capacity: " + totalCapacity);
 
-        // UC11 🔥
+        // UC11
         System.out.println("\n--- UC11: Regex Validation ---");
 
         String trainId = "TRN-1234";
@@ -153,6 +169,33 @@ public class TrainConsistManagementApp {
             System.out.println("Valid Cargo Code: " + cargoCode);
         } else {
             System.out.println("Invalid Cargo Code: " + cargoCode);
+        }
+
+        // UC12
+        System.out.println("\n--- UC12: Safety Compliance Check ---");
+
+        List<GoodsBogie> goodsList = new ArrayList<>();
+        goodsList.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsList.add(new GoodsBogie("Open", "Coal"));
+        goodsList.add(new GoodsBogie("Box", "Grain"));
+
+        // Uncomment below to test failure case
+        // goodsList.add(new GoodsBogie("Cylindrical", "Coal"));
+
+        boolean isSafe = goodsList.stream()
+                .allMatch(b ->
+                        !b.type.equals("Cylindrical") || b.cargo.equals("Petroleum")
+                );
+
+        System.out.println("Goods Bogies:");
+        for (GoodsBogie g : goodsList) {
+            System.out.println(g);
+        }
+
+        if (isSafe) {
+            System.out.println("Train is SAFETY COMPLIANT ");
+        } else {
+            System.out.println("Train is NOT SAFE ");
         }
 
         System.out.println("\nSystem ready.");
