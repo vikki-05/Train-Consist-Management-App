@@ -53,7 +53,7 @@ class GoodsBogie {
         this.cargo = cargo;
     }
 
-    // UC15: Safe Cargo Assignment
+    // UC15
     public void assignCargo(String cargo) {
         try {
             if (this.type.equals("Rectangular") && cargo.equals("Petroleum")) {
@@ -134,7 +134,7 @@ public class TrainConsistManagementApp {
             bogieList.add(new Bogie("AC Chair", 56));
             bogieList.add(new Bogie("First Class", 24));
 
-            // ❌ Invalid (UC14)
+            // ❌ Invalid
             bogieList.add(new Bogie("Invalid Bogie", -10));
 
         } catch (InvalidCapacityException e) {
@@ -164,7 +164,7 @@ public class TrainConsistManagementApp {
         Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
         System.out.println("Train ID Valid: " + trainPattern.matcher("TRN-1234").matches());
 
-        // UC12 Safety Check
+        // UC12 Safety
         List<GoodsBogie> goodsList = new ArrayList<>();
         goodsList.add(new GoodsBogie("Cylindrical", "Petroleum"));
         goodsList.add(new GoodsBogie("Open", "Coal"));
@@ -202,22 +202,47 @@ public class TrainConsistManagementApp {
         System.out.println("Loop Time: " + loopTime);
         System.out.println("Stream Time: " + streamTime);
 
-        // =========================
-        // UC15  Safe Cargo Assignment
-        // =========================
+        // UC15
         System.out.println("\n--- UC15: Safe Cargo Assignment ---");
 
         GoodsBogie g1 = new GoodsBogie("Cylindrical", null);
         GoodsBogie g2 = new GoodsBogie("Rectangular", null);
 
-        //  Safe
-        g1.assignCargo("Petroleum");
-
-        //  Unsafe
-        g2.assignCargo("Petroleum");
+        g1.assignCargo("Petroleum");   // ✅
+        g2.assignCargo("Petroleum");   // ❌
 
         System.out.println("Program continues after handling exceptions.");
 
-        System.out.println("\nSystem ready.");
+        // =========================
+        // UC16 🔥 Bubble Sort
+        // =========================
+        System.out.println("\n--- UC16: Bubble Sort ---");
+
+        int[] capacities = {72, 56, 24, 70, 60};
+
+        System.out.println("Before Sorting:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
+
+        // Bubble Sort
+        int n = capacities.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (capacities[j] > capacities[j + 1]) {
+                    // swap
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                }
+            }
+        }
+
+        System.out.println("\nAfter Sorting:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
+
+        System.out.println("\n\nSystem ready.");
     }
 }
