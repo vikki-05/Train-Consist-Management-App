@@ -4,46 +4,58 @@ public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        // Unsorted Bogie IDs
-        String[] bogieIds = {"BG309", "BG101", "BG550", "BG205", "BG412"};
+        // Example 1: EMPTY array (will throw exception)
+        String[] bogieIds = {};
 
-        String searchKey = "BG205";
+        String searchKey = "BG101";
 
-        // Step 1: Sort the array (IMPORTANT for Binary Search)
-        Arrays.sort(bogieIds);
+        try {
+            boolean found = searchBogie(bogieIds, searchKey);
 
-        System.out.println("Sorted Bogie IDs: " + Arrays.toString(bogieIds));
+            if (found) {
+                System.out.println("Bogie ID " + searchKey + " FOUND");
+            } else {
+                System.out.println("Bogie ID " + searchKey + " NOT FOUND");
+            }
 
-        // Step 2: Perform Binary Search
-        boolean found = binarySearch(bogieIds, searchKey);
+        } catch (IllegalStateException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
 
-        // Step 3: Display Result
-        if (found) {
-            System.out.println("Bogie ID " + searchKey + " FOUND");
-        } else {
-            System.out.println("Bogie ID " + searchKey + " NOT FOUND");
+        // Example 2: VALID case (works normally)
+        System.out.println("\n--- Running with valid data ---");
+
+        String[] validBogies = {"BG101", "BG205", "BG309"};
+
+        try {
+            boolean found = searchBogie(validBogies, "BG205");
+
+            if (found) {
+                System.out.println("Bogie ID BG205 FOUND");
+            } else {
+                System.out.println("Bogie ID BG205 NOT FOUND");
+            }
+
+        } catch (IllegalStateException e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
-    // Binary Search Method
-    public static boolean binarySearch(String[] arr, String key) {
-        int low = 0;
-        int high = arr.length - 1;
+    // Search method with fail-fast validation
+    public static boolean searchBogie(String[] bogies, String key) {
 
-        while (low <= high) {
-            int mid = (low + high) / 2;
+        //  FAIL-FAST CHECK
+        if (bogies == null || bogies.length == 0) {
+            throw new IllegalStateException("Cannot perform search: No bogies available in train.");
+        }
 
-            int comparison = key.compareTo(arr[mid]);
-
-            if (comparison == 0) {
-                return true; // Found
-            } else if (comparison > 0) {
-                low = mid + 1; // Search right
-            } else {
-                high = mid - 1; // Search left
+        // Linear Search (can also use Binary if sorted)
+        for (String bogie : bogies) {
+            if (bogie.equals(key)) {
+                return true;
             }
         }
 
-        return false; // Not found
+        return false;
     }
 }
