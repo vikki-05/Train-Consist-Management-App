@@ -2,27 +2,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.regex.Pattern;
 
-// ==========================
-// UC14: Custom Exception
-// ==========================
+// UC14
 class InvalidCapacityException extends Exception {
     public InvalidCapacityException(String message) {
         super(message);
     }
 }
 
-// ==========================
-// UC15: Runtime Exception
-// ==========================
+// UC15
 class CargoSafetyException extends RuntimeException {
     public CargoSafetyException(String message) {
         super(message);
     }
 }
 
-// ==========================
 // Passenger Bogie
-// ==========================
 class Bogie {
     String name;
     int capacity;
@@ -35,15 +29,12 @@ class Bogie {
         this.capacity = capacity;
     }
 
-    @Override
     public String toString() {
         return name + " (Capacity: " + capacity + ")";
     }
 }
 
-// ==========================
 // Goods Bogie
-// ==========================
 class GoodsBogie {
     String type;
     String cargo;
@@ -53,33 +44,26 @@ class GoodsBogie {
         this.cargo = cargo;
     }
 
-    // UC15
     public void assignCargo(String cargo) {
         try {
-            if (this.type.equals("Rectangular") && cargo.equals("Petroleum")) {
-                throw new CargoSafetyException("Unsafe: Rectangular bogie cannot carry Petroleum");
+            if (type.equals("Rectangular") && cargo.equals("Petroleum")) {
+                throw new CargoSafetyException("Unsafe: Rectangular cannot carry Petroleum");
             }
-
             this.cargo = cargo;
-            System.out.println("Cargo assigned successfully: " + this);
-
+            System.out.println("Assigned: " + this);
         } catch (CargoSafetyException e) {
             System.out.println("Error: " + e.getMessage());
-
         } finally {
-            System.out.println("Cargo assignment attempt completed.\n");
+            System.out.println("Assignment attempt done\n");
         }
     }
 
-    @Override
     public String toString() {
         return type + " carrying " + cargo;
     }
 }
 
-// ==========================
 // MAIN CLASS
-// ==========================
 public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
@@ -87,162 +71,128 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
 
         // UC1
-        List<String> trainConsist = new ArrayList<>();
-        System.out.println("Initial bogie count: " + trainConsist.size());
+        List<String> train = new ArrayList<>();
+        System.out.println("Initial count: " + train.size());
 
         // UC2
-        trainConsist.add("Sleeper");
-        trainConsist.add("AC Chair");
-        trainConsist.add("First Class");
-        trainConsist.remove("AC Chair");
+        train.add("Sleeper");
+        train.add("AC Chair");
+        train.add("First Class");
+        train.remove("AC Chair");
 
         // UC3
-        Set<String> bogieIds = new HashSet<>();
-        bogieIds.add("BG101");
-        bogieIds.add("BG102");
-        bogieIds.add("BG101");
+        Set<String> ids = new HashSet<>();
+        ids.add("BG101");
+        ids.add("BG101");
 
         // UC4
-        LinkedList<String> linkedTrain = new LinkedList<>();
-        linkedTrain.add("Engine");
-        linkedTrain.add("Sleeper");
-        linkedTrain.add("AC");
-        linkedTrain.add("Cargo");
-        linkedTrain.add("Guard");
-        linkedTrain.add(2, "Pantry Car");
-        linkedTrain.removeFirst();
-        linkedTrain.removeLast();
+        LinkedList<String> list = new LinkedList<>();
+        list.add("Engine");
+        list.add("Sleeper");
+        list.add("AC");
+        list.add("Cargo");
+        list.add("Guard");
+        list.add(2, "Pantry");
+        list.removeFirst();
+        list.removeLast();
 
         // UC5
         Set<String> formation = new LinkedHashSet<>();
         formation.add("Engine");
         formation.add("Sleeper");
         formation.add("Cargo");
-        formation.add("Guard");
 
         // UC6
-        Map<String, Integer> capacityMap = new HashMap<>();
-        capacityMap.put("Sleeper", 72);
-        capacityMap.put("AC Chair", 56);
-        capacityMap.put("First Class", 24);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Sleeper", 72);
+        map.put("AC Chair", 56);
 
-        // UC7–UC14
-        List<Bogie> bogieList = new ArrayList<>();
-
+        // UC7+
+        List<Bogie> bogies = new ArrayList<>();
         try {
-            bogieList.add(new Bogie("Sleeper", 72));
-            bogieList.add(new Bogie("AC Chair", 56));
-            bogieList.add(new Bogie("First Class", 24));
-
-            // ❌ Invalid
-            bogieList.add(new Bogie("Invalid Bogie", -10));
-
-        } catch (InvalidCapacityException e) {
-            System.out.println("Exception Caught: " + e.getMessage());
+            bogies.add(new Bogie("Sleeper", 72));
+            bogies.add(new Bogie("AC Chair", 56));
+            bogies.add(new Bogie("First Class", 24));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
-        // UC7 Sorting
-        bogieList.sort(Comparator.comparingInt(b -> b.capacity));
+        // UC7
+        bogies.sort(Comparator.comparingInt(b -> b.capacity));
 
-        // UC8 Filtering
-        List<Bogie> filtered = bogieList.stream()
+        // UC8
+        List<Bogie> filtered = bogies.stream()
                 .filter(b -> b.capacity > 60)
                 .collect(Collectors.toList());
 
-        // UC9 Grouping
-        Map<String, List<Bogie>> grouped = bogieList.stream()
+        // UC9
+        Map<String, List<Bogie>> grouped = bogies.stream()
                 .collect(Collectors.groupingBy(b -> b.name));
 
-        // UC10 Reduce
-        int totalCapacity = bogieList.stream()
+        // UC10
+        int total = bogies.stream()
                 .map(b -> b.capacity)
                 .reduce(0, Integer::sum);
 
-        System.out.println("Total Capacity: " + totalCapacity);
+        System.out.println("Total Capacity: " + total);
 
-        // UC11 Regex
-        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
-        System.out.println("Train ID Valid: " + trainPattern.matcher("TRN-1234").matches());
+        // UC11
+        Pattern p = Pattern.compile("TRN-\\d{4}");
+        System.out.println(p.matcher("TRN-1234").matches());
 
-        // UC12 Safety
-        List<GoodsBogie> goodsList = new ArrayList<>();
-        goodsList.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsList.add(new GoodsBogie("Open", "Coal"));
-
-        boolean isSafe = goodsList.stream()
+        // UC12
+        List<GoodsBogie> goods = new ArrayList<>();
+        goods.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        boolean safe = goods.stream()
                 .allMatch(b -> !b.type.equals("Cylindrical") || b.cargo.equals("Petroleum"));
 
-        System.out.println("Safety: " + (isSafe ? "SAFE" : "UNSAFE"));
+        System.out.println("Safe: " + safe);
 
-        // UC13 Performance
-        List<Bogie> largeList = new ArrayList<>();
-
-        try {
-            for (int i = 0; i < 100000; i++) {
-                largeList.add(new Bogie("Sleeper", 72));
-                largeList.add(new Bogie("AC Chair", 56));
-            }
-        } catch (InvalidCapacityException e) {
-            e.printStackTrace();
+        // UC13
+        long start = System.nanoTime();
+        for (Bogie b : bogies) {
+            if (b.capacity > 60) {}
         }
-
-        long startLoop = System.nanoTime();
-        List<Bogie> loopResult = new ArrayList<>();
-        for (Bogie b : largeList) {
-            if (b.capacity > 60) loopResult.add(b);
-        }
-        long loopTime = System.nanoTime() - startLoop;
-
-        long startStream = System.nanoTime();
-        List<Bogie> streamResult = largeList.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
-        long streamTime = System.nanoTime() - startStream;
-
-        System.out.println("Loop Time: " + loopTime);
-        System.out.println("Stream Time: " + streamTime);
+        long end = System.nanoTime();
+        System.out.println("Time: " + (end - start));
 
         // UC15
-        System.out.println("\n--- UC15: Safe Cargo Assignment ---");
+        GoodsBogie g = new GoodsBogie("Rectangular", null);
+        g.assignCargo("Petroleum");
 
-        GoodsBogie g1 = new GoodsBogie("Cylindrical", null);
-        GoodsBogie g2 = new GoodsBogie("Rectangular", null);
-
-        g1.assignCargo("Petroleum");   // ✅
-        g2.assignCargo("Petroleum");   // ❌
-
-        System.out.println("Program continues after handling exceptions.");
-
-        // =========================
-        // UC16 🔥 Bubble Sort
-        // =========================
-        System.out.println("\n--- UC16: Bubble Sort ---");
-
-        int[] capacities = {72, 56, 24, 70, 60};
-
-        System.out.println("Before Sorting:");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
-
-        // Bubble Sort
-        int n = capacities.length;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (capacities[j] > capacities[j + 1]) {
-                    // swap
-                    int temp = capacities[j];
-                    capacities[j] = capacities[j + 1];
-                    capacities[j + 1] = temp;
+        // UC16
+        int[] arr = {72, 56, 24, 70};
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                 }
             }
         }
 
-        System.out.println("\nAfter Sorting:");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
+        // =========================
+        // UC17 🔥 Arrays.sort()
+        // =========================
+        System.out.println("\n--- UC17: Arrays.sort() ---");
 
-        System.out.println("\n\nSystem ready.");
+        String[] bogieNames = {
+                "Sleeper",
+                "AC Chair",
+                "First Class",
+                "General",
+                "Luxury"
+        };
+
+        System.out.println("Before Sorting:");
+        System.out.println(Arrays.toString(bogieNames));
+
+        Arrays.sort(bogieNames);
+
+        System.out.println("After Sorting:");
+        System.out.println(Arrays.toString(bogieNames));
+
+        System.out.println("\nSystem ready.");
     }
 }
