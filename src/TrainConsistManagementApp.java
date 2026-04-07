@@ -24,7 +24,6 @@ public class TrainConsistManagementApp {
         // UC1
         System.out.println("=== Train Consist Management App ===");
         List<String> trainConsist = new ArrayList<>();
-        System.out.println("Initial bogie count: " + trainConsist.size());
 
         // UC2
         trainConsist.add("Sleeper");
@@ -68,7 +67,7 @@ public class TrainConsistManagementApp {
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 56));
         bogieList.add(new Bogie("First Class", 24));
-        bogieList.add(new Bogie("Sleeper", 72)); // duplicate type for grouping demo
+        bogieList.add(new Bogie("Sleeper", 72)); // duplicate for grouping
 
         bogieList.sort(Comparator.comparingInt(b -> b.capacity));
 
@@ -77,19 +76,23 @@ public class TrainConsistManagementApp {
                 .filter(b -> b.capacity > 60)
                 .collect(Collectors.toList());
 
-        // UC9  GROUPING
-        System.out.println("\n--- UC9: Group Bogies by Type ---");
-
-        Map<String, List<Bogie>> groupedBogies = bogieList.stream()
+        // UC9
+        Map<String, List<Bogie>> grouped = bogieList.stream()
                 .collect(Collectors.groupingBy(b -> b.name));
 
-        // Display grouped result
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            System.out.println("Type: " + entry.getKey());
-            for (Bogie b : entry.getValue()) {
-                System.out.println("   " + b);
-            }
+        System.out.println("\n--- UC9: Grouped Bogies ---");
+        for (Map.Entry<String, List<Bogie>> entry : grouped.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
+
+        // UC10  REDUCE (AGGREGATION)
+        System.out.println("\n--- UC10: Total Seating Capacity ---");
+
+        int totalCapacity = bogieList.stream()
+                .map(b -> b.capacity)        // extract capacity
+                .reduce(0, Integer::sum);   // sum all values
+
+        System.out.println("Total seating capacity of train: " + totalCapacity);
 
         System.out.println("\nSystem ready.");
     }
