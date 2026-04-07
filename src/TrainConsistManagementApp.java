@@ -172,26 +172,39 @@ public class TrainConsistManagementApp {
             }
         }
 
-        // =========================
-        // UC17 🔥 Arrays.sort()
-        // =========================
-        System.out.println("\n--- UC17: Arrays.sort() ---");
-
-        String[] bogieNames = {
-                "Sleeper",
-                "AC Chair",
-                "First Class",
-                "General",
-                "Luxury"
-        };
-
-        System.out.println("Before Sorting:");
-        System.out.println(Arrays.toString(bogieNames));
-
+        // UC17
+        String[] bogieNames = {"Sleeper", "AC Chair", "First Class"};
         Arrays.sort(bogieNames);
 
-        System.out.println("After Sorting:");
-        System.out.println(Arrays.toString(bogieNames));
+        // =========================
+        // UC18 🔥 Linear Search
+        // =========================
+        System.out.println("\n--- UC18: Linear Search ---");
+
+        String[] bogieIds = {
+                "BG101",
+                "BG205",
+                "BG309",
+                "BG412",
+                "BG550"
+        };
+
+        String searchKey = "BG309"; // change to test
+
+        boolean found = false;
+
+        for (String id : bogieIds) {
+            if (id.equals(searchKey)) {
+                found = true;
+                break; // early termination
+            }
+        }
+
+        if (found) {
+            System.out.println("Bogie ID " + searchKey + " FOUND in train.");
+        } else {
+            System.out.println("Bogie ID " + searchKey + " NOT FOUND.");
+        }
 
         System.out.println("\nSystem ready.");
     }
