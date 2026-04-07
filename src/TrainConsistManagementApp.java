@@ -72,18 +72,32 @@ public class TrainConsistManagementApp {
         System.out.println("\n--- UC6: Bogie Capacity Mapping ---");
 
         Map<String, Integer> bogieCapacity = new HashMap<>();
-
-        // Insert bogie capacities
         bogieCapacity.put("Sleeper", 72);
-        bogieCapacity.put("AC Chair", 50);
+        bogieCapacity.put("AC Chair", 56);
         bogieCapacity.put("First Class", 24);
 
-        // Iterate using entrySet
         System.out.println("Bogie Capacity Details:");
         for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
             System.out.println(entry.getKey() + " -> Capacity: " + entry.getValue());
         }
 
-        System.out.println("System ready for further operations.");
+        // UC7: Comparator Sorting
+        System.out.println("\n--- UC7: Sorting Bogies by Capacity ---");
+
+        List<Bogie> bogieList = new ArrayList<>();
+
+        bogieList.add(new Bogie("Sleeper", 72));
+        bogieList.add(new Bogie("AC Chair", 56));
+        bogieList.add(new Bogie("First Class", 24));
+
+        // Sort by capacity (ascending)
+        bogieList.sort(Comparator.comparingInt(b -> b.capacity));
+
+        System.out.println("Bogies sorted by capacity:");
+        for (Bogie b : bogieList) {
+            System.out.println(b);
+        }
+
+        System.out.println("\nSystem ready for further operations.");
     }
 }
